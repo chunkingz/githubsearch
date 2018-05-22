@@ -8,6 +8,8 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class GithubService {
   username: string;
+  private client_id = '2fd5c3f1098c967a2613';
+  private client_secret = 'a72a8d1b3bdd8933b67d621cfedd313c9d9c13f8';
 
   constructor(private _http: HttpClient) {
     console.log('Github service ready');
@@ -19,13 +21,15 @@ export class GithubService {
   }
   getUser(username: string): Observable<IProfile> {
     if (username.length > 0) {
-      return this._http.get(`http://api.github.com/users/${username}`).map((res: any) => <IProfile> res);
+      const userUrl = `http://api.github.com/users/${username}?client_id=${this.client_id}&client_secret=${this.client_secret}`;
+      return this._http.get(userUrl).map((res: any) => <IProfile> res);
     }
   }
 
   getRepos(username: string) {
     if (username.length > 0) {
-    return this._http.get(`http://api.github.com/users/${username}/repos`).map(res => res);
+      const reposUrl = `http://api.github.com/users/${username}/repos?client_id=${this.client_id}&client_secret=${this.client_secret}`;
+    return this._http.get(reposUrl).map(res => res);
     }
   }
 
